@@ -6,6 +6,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:math' as math;
+import 'package:audioplayers/audioplayers.dart';
 
 late int INeedDist;
 void main() {
@@ -648,6 +649,8 @@ class CountDownTimer extends StatefulWidget {
 
 class _CountDownTimerState extends State<CountDownTimer>
     with TickerProviderStateMixin {
+  AudioCache audioCache = AudioCache();
+
   late AnimationController controller;
 
   String get timerString {
@@ -667,6 +670,8 @@ class _CountDownTimerState extends State<CountDownTimer>
 
   @override
   Widget build(BuildContext context) {
+    late double Seconds1 = INeedDist / 6.5;
+    late int sec = Seconds1.toInt();
     ThemeData themeData = Theme.of(context);
     return Scaffold(
       backgroundColor: Colors.white10,
@@ -735,7 +740,7 @@ class _CountDownTimerState extends State<CountDownTimer>
                           animation: controller,
                           builder: (context, child) {
                             return FloatingActionButton.extended(
-                                onPressed: () {
+                                onPressed: () async {
                                   if (controller.isAnimating)
                                     controller.stop();
                                   else {
@@ -743,7 +748,11 @@ class _CountDownTimerState extends State<CountDownTimer>
                                         from: controller.value == 0.0
                                             ? 1.0
                                             : controller.value);
-                                    if (controller.value == 0.0) {}
+                                    await Future.delayed(Duration(seconds: sec),
+                                        () {
+                                      audioCache.load('explosion.mp3');
+                                      audioCache.play('explosion.mp3');
+                                    });
                                   }
                                 },
                                 icon: Icon(controller.isAnimating

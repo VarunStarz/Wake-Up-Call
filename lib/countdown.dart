@@ -1,6 +1,5 @@
-/*
 import 'dart:math' as math;
-
+import 'package:audioplayers/audioplayers.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
@@ -28,6 +27,7 @@ class CountDown extends StatefulWidget {
 }
 
 class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
+  AudioCache audioCache = AudioCache();
   late AnimationController controller;
 
   String get timerString {
@@ -114,18 +114,21 @@ class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
                           animation: controller,
                           builder: (context, child) {
                             return FloatingActionButton.extended(
-                                onPressed: () {
-                                  if (controller.isAnimating)
+                                onPressed: () async {
+                                  if (controller.isAnimating) {
                                     controller.stop();
-                                  else {
+                                  } else {
                                     controller.reverse(
                                         from: controller.value == 0.0
                                             ? 1.0
                                             : controller.value);
-                                    if (controller.value == 0.0) {
-                                      final player = AudioCache();
-                                      player.play('explosion.wav');
-                                    }
+                                    // ignore: unrelated_type_equality_checks
+
+                                    await Future.delayed(
+                                        const Duration(seconds: 5), () {
+                                      audioCache.load('explosion.mp3');
+                                      audioCache.play('explosion.mp3');
+                                    });
                                   }
                                 },
                                 icon: Icon(controller.isAnimating
@@ -175,4 +178,3 @@ class CustomTimerPainter extends CustomPainter {
         backgroundColor != old.backgroundColor;
   }
 }
-*/
