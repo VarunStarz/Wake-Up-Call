@@ -10,7 +10,7 @@
     
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="flutter_maps"
+        android:label="Wakey"
         android:icon="@mipmap/ic_launcher">
 
         <!-- Add your Google Maps API Key here -->
