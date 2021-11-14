@@ -28,6 +28,9 @@ class CountDown extends StatefulWidget {
 
 class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
   AudioCache audioCache = AudioCache();
+  AudioPlayer player = AudioPlayer();
+  final playerx = new AudioCache(fixedPlayer: AudioPlayer());
+
   late AnimationController controller;
 
   String get timerString {
@@ -110,33 +113,46 @@ class _CountDownState extends State<CountDown> with TickerProviderStateMixin {
                           ),
                         ),
                       ),
-                      AnimatedBuilder(
-                          animation: controller,
-                          builder: (context, child) {
-                            return FloatingActionButton.extended(
-                                onPressed: () async {
-                                  if (controller.isAnimating) {
-                                    controller.stop();
-                                  } else {
-                                    controller.reverse(
-                                        from: controller.value == 0.0
-                                            ? 1.0
-                                            : controller.value);
-                                    // ignore: unrelated_type_equality_checks
+                      Center(
+                        child: Row(
+                          children: [
+                            AnimatedBuilder(
+                                animation: controller,
+                                builder: (context, child) {
+                                  return FloatingActionButton.extended(
+                                      onPressed: () async {
+                                        if (controller.isAnimating) {
+                                          controller.stop();
+                                        } else {
+                                          controller.reverse(
+                                              from: controller.value == 0.0
+                                                  ? 1.0
+                                                  : controller.value);
+                                          // ignore: unrelated_type_equality_checks
 
-                                    await Future.delayed(
-                                        const Duration(seconds: 5), () {
-                                      audioCache.load('explosion.mp3');
-                                      audioCache.play('explosion.mp3');
-                                    });
-                                  }
-                                },
-                                icon: Icon(controller.isAnimating
-                                    ? Icons.pause
-                                    : Icons.play_arrow),
-                                label: Text(
-                                    controller.isAnimating ? "Pause" : "Play"));
-                          }),
+                                          await Future.delayed(
+                                              const Duration(seconds: 5), () {
+                                            audioCache.load('wakeyalarm.mp3');
+                                            audioCache.play('wakeyalarm.mp3');
+                                          });
+                                        }
+                                      },
+                                      icon: Icon(controller.isAnimating
+                                          ? Icons.pause
+                                          : Icons.play_arrow),
+                                      label: Text(controller.isAnimating
+                                          ? "Pause"
+                                          : "Play"));
+                                }),
+                            FloatingActionButton(
+                              child: Text('Stop Alarm'),
+                              onPressed: () {
+                                playerx.fixedPlayer!.stop();
+                              },
+                            )
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_maps/countdown.dart';
+import 'package:flutter_maps/loader.dart';
 import 'package:flutter_maps/secrets.dart'; // Stores the Google Maps API Key
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding/geocoding.dart';
@@ -526,72 +527,92 @@ class _MapViewState extends State<MapView> {
                               ),
                             ),
                           ),*/
-                          Row(
-                            children: [
-                              ElevatedButton(
-                                onPressed: (_startAddress != '' &&
-                                        _destinationAddress != '')
-                                    ? () async {
-                                        startAddressFocusNode.unfocus();
-                                        desrinationAddressFocusNode.unfocus();
-                                        setState(() {
-                                          if (markers.isNotEmpty)
-                                            markers.clear();
-                                          if (polylines.isNotEmpty)
-                                            polylines.clear();
-                                          if (polylineCoordinates.isNotEmpty)
-                                            polylineCoordinates.clear();
-                                          _placeDistance = null;
-                                        });
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                ElevatedButton(
+                                  onPressed: (_startAddress != '' &&
+                                          _destinationAddress != '')
+                                      ? () async {
+                                          startAddressFocusNode.unfocus();
+                                          desrinationAddressFocusNode.unfocus();
+                                          setState(() {
+                                            if (markers.isNotEmpty)
+                                              markers.clear();
+                                            if (polylines.isNotEmpty)
+                                              polylines.clear();
+                                            if (polylineCoordinates.isNotEmpty)
+                                              polylineCoordinates.clear();
+                                            _placeDistance = null;
+                                          });
 
-                                        _calculateDistance()
-                                            .then((isCalculated) {
-                                          if (isCalculated) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                    'Distance Calculated Sucessfully'),
-                                              ),
-                                            );
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                    'Error Calculating Distance'),
-                                              ),
-                                            );
-                                          }
-                                        });
-                                      }
-                                    : null,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'Show Route'.toUpperCase(),
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20.0,
+                                          _calculateDistance()
+                                              .then((isCalculated) {
+                                            if (isCalculated) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                      'Distance Calculated Sucessfully'),
+                                                ),
+                                              );
+                                            } else {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                      'Error Calculating Distance'),
+                                                ),
+                                              );
+                                            }
+                                          });
+                                        }
+                                      : null,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Show Route'.toUpperCase(),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20.0,
+                                      ),
+                                    ),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.red,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20.0),
                                     ),
                                   ),
                                 ),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.red,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
+                                SizedBox(
+                                  width: 40,
                                 ),
-                              ),
-                              ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                CountDownTimer()));
-                                  },
-                                  child: Text('Calculate Time')),
-                            ],
+                                SizedBox(
+                                  height: 40,
+                                  width: 130,
+                                  child: ElevatedButton(
+                                      onPressed: () async {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ColorLoader2()));
+
+                                        await Future.delayed(
+                                            Duration(seconds: 3), () {
+                                          Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          CountDownTimer()));
+                                        });
+                                      },
+                                      child: Text('Calculate Time')),
+                                ),
+                              ],
+                            ),
                           )
                         ],
                       ),
@@ -750,8 +771,8 @@ class _CountDownTimerState extends State<CountDownTimer>
                                             : controller.value);
                                     await Future.delayed(Duration(seconds: sec),
                                         () {
-                                      audioCache.load('explosion.mp3');
-                                      audioCache.play('explosion.mp3');
+                                      audioCache.load('wakeyalarm.mp3');
+                                      audioCache.play('wakeyalarm.mp3');
                                     });
                                   }
                                 },

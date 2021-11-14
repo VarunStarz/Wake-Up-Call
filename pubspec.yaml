@@ -35,6 +35,8 @@ dependencies:
   circular_countdown_timer: ^0.2.0
   rflutter_alert: ^2.0.4
   audioplayers: ^0.20.1
+  shimmer: ^2.0.0
+  google_fonts: ^2.1.0
 
 dev_dependencies:
   flutter_test:
